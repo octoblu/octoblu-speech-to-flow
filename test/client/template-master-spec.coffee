@@ -65,11 +65,11 @@ describe 'TemplateMaster', ->
 
       describe 'when called with a different tag and it yields an error', ->
         beforeEach (done) ->
-          @request.end = sinon.stub().yields 'oh no'
+          @request.end = sinon.stub().yields new Error('oh no')
           @sut.findOneByTags ['latte'], (@error) => done()
 
         it 'should yield an error', ->
-          expect(@error).to.equal 'oh no'
+          expect(@error.message).to.equal 'oh no'
 
   describe '->import', ->
     describe 'when instantiated with credentials', ->
@@ -102,11 +102,11 @@ describe 'TemplateMaster', ->
 
       describe 'when called with an invalid templateId', ->
         beforeEach (done) ->
-          @request.end = sinon.stub().yields 'it did not work'
+          @request.end = sinon.stub().yields new Error('it did not work')
           @sut.import 'chemex', (@error) => done()
 
         it 'should call the callback with the error', ->
-          expect(@error).to.deep.equal 'it did not work'
+          expect(@error.message).to.deep.equal 'it did not work'
 
     describe 'when instantiated with different credentials', ->
       beforeEach ->
@@ -159,8 +159,8 @@ describe 'TemplateMaster', ->
 
       describe 'when called with an invalid flowId', ->
         beforeEach (done) ->
-          @request.end = sinon.stub().yields 'oh boy'
+          @request.end = sinon.stub().yields new Error('oh boy')
           @sut.deploy 'latte', (@error) => done()
 
         it 'should throw an error', ->
-          expect(@error).to.equal 'oh boy'
+          expect(@error.message).to.equal 'oh boy'
