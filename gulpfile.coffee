@@ -1,7 +1,6 @@
 browserSync   = require 'browser-sync'
 gulp          = require 'gulp'
 gutil         = require 'gulp-util'
-# server        = require 'pushstate-server'
 watch         = require 'gulp-autowatch'
 webpack       = require 'webpack'
 webpackConfig = require './webpack.config'
@@ -13,10 +12,7 @@ gulp.task 'browser-sync', ->
 
 gulp.task 'webpack', ->
   webpack webpackConfig, (err, stats) ->
-    if err
-      throw new gutil.pluginError 'webpack', err
-    gutil.log '[webpack]', stats.toString
-      colors: true
+    throw new gutil.pluginError 'webpack', err if err
 
 gulp.task 'watch', ->
   watch gulp,
@@ -26,11 +22,6 @@ gulp.task 'watch', ->
       './client/**/*.cjsx'
       './client/**/*.coffee'
     ]
-
-# gulp.task 'serve', ->
-#   server.start
-#     port: process.env.PORT || 3000
-#     directory: './public'
 
 gulp.task 'build', ['webpack']
 
