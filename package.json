@@ -19,7 +19,9 @@
   "homepage": "https://github.com/octoblu/meshblu-speech-to-text",
   "dependencies": {
     "coffee-script": "^1.9.2",
+    "lodash": "^3.7.0",
     "react": "^0.13.2",
+    "react-router": "^0.13.3",
     "superagent": "^1.2.0"
   },
   "devDependencies": {

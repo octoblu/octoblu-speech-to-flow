@@ -1,12 +1,12 @@
 React = require('react')
-Speech = require('./components/speech')
+Router = require('react-router')
+{ Route, RouteHandler, Link } = Router
+
 
 App = React.createClass
-  displayName: 'HelloWorld'
+  displayName: 'App'
 
   render: ->
-    <div>
-      <Speech />
-    </div>
+    <RouteHandler/>
 
-React.render(<App />, document.getElementById('app'));
+module.exports = App
