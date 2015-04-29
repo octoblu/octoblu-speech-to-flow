@@ -1,17 +1,32 @@
+_ = require 'lodash'
+
 class TemplateMaster
   constructor: (credentials, dependencies={}) ->
     {@uuid, @token} = credentials
     @request = dependencies.request ? require 'superagent'
     @OCTOBLU_API = 'https://app.octoblu.com'
 
-  findByTag: (tag, callback=->) =>
+  findAndDeploy: (tags, callback=->) =>
+    # Find By Tag
+    @findOneByTags tags, (error, template) =>
+      return callback error if error?
+      return callback 'no template found' unless template?
+      # Import Template
+      @import template.templateId, (error, flow) =>
+        return callback error if error?
+        {flowId} = flow
+        return callback 'no flow created' unless flowId?
+        # Deploy the Flow
+        @deploy flowId, callback
+
+  findOneByTags: (tags, callback=->) =>
     @request
       .get "#{@OCTOBLU_API}/api/templates/public"
-      .query tags: [tag]
+      .query tags: tags
       .auth @uuid, @token
       .end (error, result) =>
         return callback error if error?
-        callback null, result?.body
+        callback null, _.first(result?.body)
 
   import: (templateId, callback=->) =>
     @request
@@ -21,7 +36,7 @@ class TemplateMaster
         return callback error if error?
         callback null, result?.body
 
-  deployFlow: (flowId, callback=->) =>
+  deploy: (flowId, callback=->) =>
     @request
       .post "#{@OCTOBLU_API}/api/flows/#{flowId}/instance"
       .auth @uuid, @token

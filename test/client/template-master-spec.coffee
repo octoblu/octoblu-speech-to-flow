@@ -11,7 +11,7 @@ describe 'TemplateMaster', ->
 
     @dependencies = request: @request
 
-  describe '->findByTag', ->
+  describe '->findOneByTags', ->
     describe 'when instantiated with a uuid and token', ->
       beforeEach ->
         credentials = uuid: 'black', token: 'green'
@@ -20,8 +20,8 @@ describe 'TemplateMaster', ->
 
       describe 'when called with a tag', ->
         beforeEach (done) ->
-          @request.end = sinon.stub().yields null, body: [{name: 'espresso'}, {name: 'cold-brew'}]
-          @sut.findByTag 'mocha', (error, @templates) => done()
+          @request.end = sinon.stub().yields null, body: [{name: 'cold-brew'}]
+          @sut.findOneByTags ['mocha'], (error, @templates) => done()
 
         it 'should set the auth for the request', ->
           expect(@request.auth).to.have.been.calledWith 'black','green'
@@ -33,7 +33,7 @@ describe 'TemplateMaster', ->
           expect(@request.query).to.have.been.calledWith tags: ['mocha']
 
         it 'should call the callback with templates', ->
-          expect(@templates).to.deep.equal [{name: 'espresso'}, {name: 'cold-brew'}]
+          expect(@templates).to.deep.equal {name: 'cold-brew'}
 
     describe 'when instantiated with a different uuid and token', ->
       beforeEach ->
@@ -43,25 +43,16 @@ describe 'TemplateMaster', ->
 
       describe 'when called with a tag', ->
         beforeEach (done) ->
-          @request.end = sinon.stub().yields null, body: [{name: 'espresso'}, {name: 'cold-brew'}]
-          @sut.findByTag 'mocha', (error, @templates) => done()
+          @request.end = sinon.stub().yields null, body: [{name: 'espresso'}]
+          @sut.findOneByTags 'mocha', (error, @templates) => done()
 
         it 'should set the auth for the request', ->
           expect(@request.auth).to.have.been.calledWith 'iced','herbal'
 
-        it 'should call request with the correct uri and data', ->
-          expect(@request.get).to.have.been.calledWith 'https://app.octoblu.com/api/templates/public'
-
-        it 'should call request with the correct uri and data', ->
-          expect(@request.query).to.have.been.calledWith tags: ['mocha']
-
-        it 'should call the callback with templates', ->
-          expect(@templates).to.deep.equal [{name: 'espresso'}, {name: 'cold-brew'}]
-
       describe 'when called with a different tag', ->
         beforeEach (done) ->
           @request.end = sinon.stub().yields null, body: [{name: 'chai'}, {name: 'tea'}]
-          @sut.findByTag 'clever', (error, @templates) => done()
+          @sut.findOneByTags ['clever'], (error, @templates) => done()
 
         it 'should call request with the correct uri and data', ->
           expect(@request.get).to.have.been.calledWith 'https://app.octoblu.com/api/templates/public'
@@ -70,12 +61,12 @@ describe 'TemplateMaster', ->
           expect(@request.query).to.have.been.calledWith tags: ['clever']
 
         it 'should call the callback with templates', ->
-          expect(@templates).to.deep.equal [{name: 'chai'}, {name: 'tea'}]
+          expect(@templates).to.deep.equal {name: 'chai'}
 
       describe 'when called with a different tag and it yields an error', ->
         beforeEach (done) ->
           @request.end = sinon.stub().yields 'oh no'
-          @sut.findByTag 'latte', (@error) => done()
+          @sut.findOneByTags ['latte'], (@error) => done()
 
         it 'should yield an error', ->
           expect(@error).to.equal 'oh no'
@@ -131,14 +122,7 @@ describe 'TemplateMaster', ->
         it 'should set the uuid and token as the request.auth', ->
           expect(@request.auth).to.have.been.calledWith 'herio', 'v60'
 
-        it 'should call request.post', ->
-          expect(@request.post).to.have.been.calledWith 'https://app.octoblu.com/api/templates/sweet/flows'
-
-        it 'should yield a flow', ->
-          expect(@flow).to.deep.equal flowId: 'daily-coffee'
-
-
-  describe '->deployFlow', ->
+  describe '->deploy', ->
     describe 'when instantiated with credentials', ->
       beforeEach ->
         credentials = uuid: 'excellente', token: 'one&one'
@@ -148,7 +132,7 @@ describe 'TemplateMaster', ->
       describe 'when called with a flowId', ->
         beforeEach (done) ->
           @request.end = sinon.stub().yields()
-          @sut.deployFlow 'aeropress', (@error) => done()
+          @sut.deploy 'aeropress', (@error) => done()
 
         it 'should call request.auth with the uuid and token', ->
           expect(@request.auth).to.have.been.calledWith 'excellente', 'one&one'
@@ -168,7 +152,7 @@ describe 'TemplateMaster', ->
       describe 'when called with a flowId', ->
         beforeEach (done) ->
           @request.end = sinon.stub().yields()
-          @sut.deployFlow 'aeropress', (@error) => done()
+          @sut.deploy 'aeropress', (@error) => done()
 
         it 'should call request.auth with the uuid and token', ->
           expect(@request.auth).to.have.been.calledWith 'toddy', 'stupid-things'
@@ -176,7 +160,7 @@ describe 'TemplateMaster', ->
       describe 'when called with an invalid flowId', ->
         beforeEach (done) ->
           @request.end = sinon.stub().yields 'oh boy'
-          @sut.deployFlow 'latte', (@error) => done()
+          @sut.deploy 'latte', (@error) => done()
 
         it 'should throw an error', ->
           expect(@error).to.equal 'oh boy'
