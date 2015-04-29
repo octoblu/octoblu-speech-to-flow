@@ -1,14 +1,19 @@
-browserSync   = require 'browser-sync'
+server        = require 'gulp-webserver'
 gulp          = require 'gulp'
 gutil         = require 'gulp-util'
 watch         = require 'gulp-autowatch'
 webpack       = require 'webpack'
 webpackConfig = require './webpack.config'
 
-gulp.task 'browser-sync', ->
-  browserSync.init ['./public/*.html', './public/**/*.css', './public/**/*.js'],
-    server:
-      baseDir: './public'
+gulp.task 'server', ->
+  gulp
+    .src('public')
+    .pipe(server({
+      livereload: true,
+      directoryListing: false,
+      open: true,
+      fallback: 'index.html'
+    }))
 
 gulp.task 'webpack', ->
   webpack webpackConfig, (err, stats) ->
@@ -25,4 +30,4 @@ gulp.task 'watch', ->
 
 gulp.task 'build', ['webpack']
 
-gulp.task 'default', ['build', 'watch', 'browser-sync']
+gulp.task 'default', ['build', 'watch', 'server']

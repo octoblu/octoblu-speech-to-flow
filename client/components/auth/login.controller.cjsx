@@ -3,7 +3,7 @@ React = require('react')
 LoginProviderLink = require('./login-provider-link')
 providers = require('./providers')
 
-CALLBACK_URL = "#{window.location.origin}/#/auth-login-success"
+CALLBACK_URL = "#{window.location.origin}/auth-login-success"
 
 Login = React.createClass
   displayName: 'AuthLogin'

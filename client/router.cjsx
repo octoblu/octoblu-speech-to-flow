@@ -11,11 +11,12 @@ routes =
   <Route handler={App} path="/">
     <DefaultRoute handler={Login} />
     <Route name="speech" handler={Speech} />
+    <Route name="auth-login-success" handler={LoginSuccess} />
     <NotFoundRoute handler={Login}/>
 
     <Redirect from="auth-login-success" to="speech" />
   </Route>
 
 
-Router.run routes, (Handler) ->
+Router.run routes, Router.HistoryLocation, (Handler) ->
   React.render(<Handler/>, document.getElementById('app'))

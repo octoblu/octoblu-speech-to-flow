@@ -14,8 +14,16 @@ LoginSuccess = React.createClass
     token = router.getCurrentQuery().token
 
     if uuid && token
-      localStorage.setItem "meshblu_auth_uuid", uuid
-      localStorage.setItem "meshblu_auth_token", token
+      @setCredentials(uuid, token)
+      router.transitionTo('/speech')
+    else
+      router.transitionTo('/')
+
+  setCredentials: (uuid, token) ->
+    localStorage.setItem "meshblu_auth_uuid", uuid
+    localStorage.setItem "meshblu_auth_token", token
+
+    console.log "UUID #{localStorage.getItem 'meshblu_auth_uuid'} Token #{localStorage.getItem 'meshblu_auth_token'}"
 
   render: ->
     <h1>Success</h1>

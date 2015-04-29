@@ -1,9 +1,13 @@
+_ = require 'lodash'
 React = require 'react'
 TemplateMaster = require '../template-master'
-_ = require 'lodash'
+
 
 Speech = React.createClass
   displayName: 'SpeechWindow'
+
+  contextTypes:
+    router: React.PropTypes.func
 
   getInitialState: ->
     result: ''
@@ -12,19 +16,10 @@ Speech = React.createClass
   componentWillMount: ->
     console.log 'Will Mount...'
     @recognition = new webkitSpeechRecognition()
-    @templateMaster = new TemplateMaster @getCredentials()
-
-  getCredentials: ->
-    uuid: window.localStorage.getItem 'meshblu_auth_uuid'
-    token: window.localStorage.getItem 'meshblu_auth_token'
-
-  handleResponse: (transcript) ->
-    console.log 'transcript', transcript
-    @templateMaster.findAndDeploy [transcript], (error) =>
-      console.error 'Error:', error if error?
 
   componentDidMount: ->
     console.log 'Did Mount...'
+    @templateMaster = new TemplateMaster @getCredentials()
 
     @recognition.onresult = (event) =>
       transcript = event.results[0][0].transcript
@@ -39,6 +34,25 @@ Speech = React.createClass
 
   record: (event) ->
     @recognition.start()
+
+  getCredentials: ->
+    {
+      uuid: localStorage.getItem 'meshblu_auth_uuid'
+      token: localStorage.getItem 'meshblu_auth_token'
+    }
+  setCredential: ->
+    {router} = @context
+    uuid = router.getCurrentQuery().uuid
+    token = router.getCurrentQuery().token
+
+    if uuid && token
+      localStorage.setItem "meshblu_auth_uuid", uuid
+      localStorage.setItem "meshblu_auth_token", token
+
+  handleResponse: (transcript) ->
+    console.log 'transcript', transcript
+    @templateMaster.findAndDeploy [transcript], (error) =>
+      console.error 'Error:', error if error?
 
   render: ->
     <div className="speech-window">
