@@ -21,7 +21,7 @@ Speech = React.createClass
   handleResponse: (transcript) ->
     console.log 'transcript', transcript
     @templateMaster.findAndDeploy [transcript], (error) =>
-      console.error 'Error:', error.message if error?
+      console.error 'Error:', error if error?
 
   componentDidMount: ->
     console.log 'Did Mount...'

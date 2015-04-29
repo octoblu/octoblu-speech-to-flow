@@ -10,12 +10,12 @@ class TemplateMaster
     # Find By Tag
     @findOneByTags tags, (error, template) =>
       return callback error if error?
-      return callback 'no template found' unless template?
+      return callback new Error('no template found') unless template?
       # Import Template
       @import template.templateId, (error, flow) =>
         return callback error if error?
         {flowId} = flow
-        return callback 'no flow created' unless flowId?
+        return callback new Error('no flow created') unless flowId?
         # Deploy the Flow
         @deploy flowId, callback
 
