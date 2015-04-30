@@ -1,0 +1,65 @@
+.speech {
+  .flex();
+  .flex-direction(column);
+  .justify-content(center);
+  .align-items(center);
+  .align-content(center);
+
+  border: 1px solid #111;
+  border-radius: 3px;
+  margin: auto;
+  padding: 25px;
+  position: relative;
+  height: 400px;
+  width: 300px;
+
+  color: #08c;
+
+  background: #F8F8F8;
+}
+
+.speech__header {
+  .order(-1);
+  margin: 0;
+  padding: 0;
+}
+
+.speech__record-button {
+  .order(3);
+
+  border: 1px solid #CBCBCB;
+  border-radius: 50px;
+  width: 100px;
+  height: 100px;
+
+  cursor: pointer;
+
+  background: #FFF;
+
+  position: absolute;
+  bottom: -50px;
+  left: 100px;
+}
+
+.speech__record-button-icon {
+  margin-left: 20px;
+  display: block;
+  width: 50px;
+}
+
+.speech__result {
+  .order(0);
+
+  border: 1px solid #CBCBCB;
+  height: 160px;
+  margin: 25px 0;
+  padding: 15px;
+  width: 100%;
+  font-size: 16px;
+
+  background: #FBFBFB;
+
+  &:focus {
+    outline: none;
+  }
+}

@@ -1,0 +1,141 @@
+html {
+  box-sizing: border-box;
+}
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+body {
+  color: #FFF;
+  font-family: 'Roboto', sans-serif;
+  text-align: center;
+  text-rendering: optimizeLegibility;
+  background: #2F2F2F;
+}
+a {
+  color: orange;
+}
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-weight: 300;
+}
+.logo {
+  width: 275px;
+  height: auto;
+  margin: 50px auto 60px;
+}
+.auth-login__providers {
+  width: 450px;
+  margin: 250px auto 0;
+}
+.auth-login__provider {
+  display: block;
+  margin-bottom: 15px;
+  padding: 10px 25px;
+  color: #FFF;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  background: orange;
+}
+.speech {
+  -webkit-box-flex: 1;
+  -moz-box-flex: 1;
+  -webkit-flex: 1 1 0%;
+  -moz-flex: 1 1 0%;
+  -ms-flex: 1 1 0%;
+  flex: 1 1 0%;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -moz-box-direction: normal;
+  -webkit-flex-direction: column;
+  -moz-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: center;
+  -moz-box-pack: center;
+  -ms-flex-pack: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  -moz-box-align: center;
+  -ms-flex-align: center;
+  -webkit-align-items: center;
+  -moz-align-items: center;
+  -ms-align-items: center;
+  align-items: center;
+  -ms-flex-line-pack: center;
+  -webkit-align-content: center;
+  -moz-align-content: center;
+  -ms-align-content: center;
+  align-content: center;
+  border: 1px solid #111;
+  border-radius: 3px;
+  margin: auto;
+  padding: 25px;
+  position: relative;
+  height: 400px;
+  width: 300px;
+  color: #08c;
+  background: #F8F8F8;
+}
+.speech__header {
+  -webkit-box-ordinal-group: 0;
+  -moz-box-ordinal-group: 0;
+  -ms-flex-order: -1;
+  -webkit-order: -1;
+  -moz-order: -1;
+  -ms-order: -1;
+  order: -1;
+  margin: 0;
+  padding: 0;
+}
+.speech__record-button {
+  -webkit-box-ordinal-group: 4;
+  -moz-box-ordinal-group: 4;
+  -ms-flex-order: 3;
+  -webkit-order: 3;
+  -moz-order: 3;
+  -ms-order: 3;
+  order: 3;
+  border: 1px solid #CBCBCB;
+  border-radius: 50px;
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  background: #FFF;
+  position: absolute;
+  bottom: -50px;
+  left: 100px;
+}
+.speech__record-button-icon {
+  margin-left: 20px;
+  display: block;
+  width: 50px;
+}
+.speech__result {
+  -webkit-box-ordinal-group: 1;
+  -moz-box-ordinal-group: 1;
+  -ms-flex-order: 0;
+  -webkit-order: 0;
+  -moz-order: 0;
+  -ms-order: 0;
+  order: 0;
+  border: 1px solid #CBCBCB;
+  height: 160px;
+  margin: 25px 0;
+  padding: 15px;
+  width: 100%;
+  font-size: 16px;
+  background: #FBFBFB;
+}
+.speech__result:focus {
+  outline: none;
+}

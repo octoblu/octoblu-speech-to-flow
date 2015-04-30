@@ -24,7 +24,7 @@ Speech = React.createClass
     @recognition.onresult = (event) =>
       transcript = event.results[0][0].transcript
       @setState result: transcript
-      @handleResponse transcript
+      # @handleResponse transcript
 
     @recognition.onstart = (event) =>
       @setState recording: true
@@ -55,17 +55,18 @@ Speech = React.createClass
       console.error 'Error:', error if error?
 
   render: ->
-    <div className="speech-window">
-      <h1>Press the Button to begin recording....</h1>
+    <div className="speech">
+      <h1 className="speech__header">Press the Button to begin recording....</h1>
+
+      <textarea className="speech__result" value={@state.result}></textarea>
 
       <button
         onClick={@record}
         disabled={@state.recording}
-        className="speech__record__button">
-        Record
-      </button>
+        className="speech__record-button">
 
-      <p className="speech__result">{@state.result}</p>
+        <img src="https://s3-us-west-2.amazonaws.com/octoblu-icons/microphone.png" className="speech__record-button-icon"/>
+      </button>
     </div>
 
 module.exports = Speech
