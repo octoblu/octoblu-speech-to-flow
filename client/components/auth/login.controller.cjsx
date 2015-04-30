@@ -17,9 +17,8 @@ Login = React.createClass
         url={providerUrlWithCallback}/>
 
   render: ->
-    providerList = @renderProviders()
     <div className="auth-login__providers">
-      {providerList}
+      {@renderProviders()}
     </div>
 
 module.exports = Login
