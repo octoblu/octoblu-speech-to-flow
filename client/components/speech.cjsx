@@ -24,7 +24,7 @@ Speech = React.createClass
     @recognition.onresult = (event) =>
       transcript = event.results[0][0].transcript
       @setState result: transcript
-      # @handleResponse transcript
+      @handleResponse transcript
 
     @recognition.onstart = (event) =>
       @setState recording: true
