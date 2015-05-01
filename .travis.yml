@@ -6,6 +6,9 @@ cache:
   - node_modules
 node_js:
 - '0.10'
+before_script:
+  - npm install
+  - node_modules/.bin/gulp build
 env:
   global:
   - AWS_ACCESS_KEY_ID=AKIAIT4X4NDGM2WVL6VA
@@ -38,5 +41,16 @@ deploy:
   region: us-west-2
   application: docker-builder
   deployment_group: octoblu-speech-to-flow
+  on:
+    branch: master
+- provider: s3
+  access_key_id: AKIAIT4X4NDGM2WVL6VA
+  secret_access_key: *1
+  bucket: speech-to-flow.octoblu.com
+  region: us-west-2
+  skip_cleanup: true
+  detect_encoding: true
+  cache_control: "max-age=31536000"
+  local-dir: public
   on:
     branch: master
