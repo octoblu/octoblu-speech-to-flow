@@ -1,5 +1,5 @@
 #!/bin/bash
 
-find public -name *.html | xargs sed -i "s|./|./$TRAVIS_COMMIT/|"
 mkdir -p cdn_public/$TRAVIS_COMMIT
 cp -rf public/* cdn_public/$TRAVIS_COMMIT
+find cdn_public/$TRAVIS_COMMIT -name *.html | xargs sed -ir -e "s|\\./|\\./$TRAVIS_COMMIT/|"
