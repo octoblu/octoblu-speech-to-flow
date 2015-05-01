@@ -18,8 +18,11 @@ Speech = React.createClass
     @recognition = new webkitSpeechRecognition()
 
   componentDidMount: ->
+    {router} = @context
     console.log 'Did Mount...'
-    @templateMaster = new TemplateMaster @getCredentials()
+    credentials = @getCredentials()
+    return router.transitionTo('/') unless credentials.uuid?
+    @templateMaster = new TemplateMaster credentials
 
     @recognition.onresult = (event) =>
       transcript = event.results[0][0].transcript
@@ -40,14 +43,6 @@ Speech = React.createClass
       uuid: localStorage.getItem 'meshblu_auth_uuid'
       token: localStorage.getItem 'meshblu_auth_token'
     }
-  setCredential: ->
-    {router} = @context
-    uuid = router.getCurrentQuery().uuid
-    token = router.getCurrentQuery().token
-
-    if uuid && token
-      localStorage.setItem "meshblu_auth_uuid", uuid
-      localStorage.setItem "meshblu_auth_token", token
 
   handleResponse: (transcript) ->
     console.log 'transcript', transcript
