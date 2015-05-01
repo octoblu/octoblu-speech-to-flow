@@ -10,7 +10,7 @@ class TemplateMaster
     # Find By Tag
     @findOneByTags tags, (error, template) =>
       return callback error if error?
-      return callback new Error('no template found') unless template?      
+      return callback new Error('no template found') unless template?
       # Import Template
       @import template.uuid, (error, flow) =>
         return callback error if error?
@@ -20,6 +20,11 @@ class TemplateMaster
         @deploy flowId, callback
 
   findOneByTags: (tags, callback=->) =>
+    tags =  _.map tags, (tag) =>
+      if _.isString tag
+        return _.trim tag.toLowerCase()
+      else
+        return tag
     @request
       .get "#{@OCTOBLU_API}/api/templates/public"
       .query tags: tags
