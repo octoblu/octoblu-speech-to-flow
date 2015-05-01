@@ -22,7 +22,7 @@ env:
   - secure: TvwLrTxCVAp0ve4cAbiDb5bFKjBH3G2bG3MUmqn2y7RhGBCw7lWt6wXF9AXmuAFRW2iWaAdEF2Ctb3eu73zRXcmUPLrscEvASRAvxfTjSqwerv/gx67LZM/K+31axQl2ePDQLDdt96A5ZQPnOhtyqv/FfiCQf6EdKgP/YoG164U=
 after_success:
 - .kubernetes/travis_after_success
-- .travis_after_success
+- ./.travis_after_success
 deploy:
 - provider: s3
   access_key_id: AKIAIT4X4NDGM2WVL6VA
@@ -52,6 +52,6 @@ deploy:
   skip_cleanup: true
   detect_encoding: true
   cache_control: "max-age=31536000"
-  local-dir: cdn_public
+  local_dir: cdn_public
   on:
     branch: master
