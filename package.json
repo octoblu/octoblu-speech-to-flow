@@ -1,7 +1,7 @@
 {
   "name": "meshblu-speech-to-text",
   "version": "1.0.0",
-  "description": "Simple web application that uses chrome's webkit speech recognizer and sends the data up to Octoblu.",
+  "description": "Simple web application that uses chrome's webkit speech recognizer and creates a flow if it can.",
   "main": "index.js",
   "scripts": {
     "start": "gulp",

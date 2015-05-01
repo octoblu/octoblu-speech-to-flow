@@ -1,0 +1,42 @@
+language: node_js
+sudo: false
+cache:
+  bundler: true
+  directories:
+  - node_modules
+node_js:
+- '0.10'
+env:
+  global:
+  - AWS_ACCESS_KEY_ID=AKIAIT4X4NDGM2WVL6VA
+  - DOCKER_USERNAME=octoblu
+  - DEPLOY_APPLICATION_NAME=octoblu-speech-to-flow
+  - DEPLOY_REGION=us-west-2
+  - DEPLOY_BUCKET=octoblu-deploy
+  - DEPLOYMENT_GROUP=master
+  - DEPLOY_KEY=octoblu-speech-to-flow/octoblu-speech-to-flow-$TRAVIS_COMMIT.zip
+  - secure: RzAEWZQJUCkSlcGDRVJZSyQe40wwj+8SFF5PFJDsoAD7f+XF6lenW8EuohoohhZxTNprfMW86ERsrq9DwfkEoEv9iSRq7nGNIx9wbQbzJePZQiVujMEOgSW5/V8g6E1ICpeGb+O3I8bAcgYW34Q60srdeEC13A76bU1UcJTfWgs=
+  - secure: TvwLrTxCVAp0ve4cAbiDb5bFKjBH3G2bG3MUmqn2y7RhGBCw7lWt6wXF9AXmuAFRW2iWaAdEF2Ctb3eu73zRXcmUPLrscEvASRAvxfTjSqwerv/gx67LZM/K+31axQl2ePDQLDdt96A5ZQPnOhtyqv/FfiCQf6EdKgP/YoG164U=
+after_success:
+- .kubernetes/travis_after_success
+deploy:
+- provider: s3
+  access_key_id: AKIAIT4X4NDGM2WVL6VA
+  secret_access_key: &1
+    secure: Y7P9YQi85ULGOhxL0YbM18ndctUqVAlGVdFTEqzl2eit/tyuRGU5BEWEhx8yJFfhoZfP9afdYiYtRfz8VSua09wfXoDFfgrwRMuK9l+wHLkA0nki8Aj+YNKrWl6f6kXRNr5McrWDzgRaqA1mEG1c8lYbMYQWdjXrtZgcguJ92SQ=
+  local_dir: dpl_cd_upload
+  skip_cleanup: true
+  bucket: octoblu-deploy
+  on:
+    branch: master
+- provider: codedeploy
+  access_key_id: AKIAIT4X4NDGM2WVL6VA
+  secret_access_key: *1
+  bucket: octoblu-deploy
+  key: docker-builder/octoblu-speech-to-flow-$TRAVIS_COMMIT.zip
+  bundle_type: zip
+  region: us-west-2
+  application: docker-builder
+  deployment_group: octoblu-speech-to-flow
+  on:
+    branch: master
