@@ -20,6 +20,7 @@ Speech = React.createClass
   componentDidMount: ->
     console.log 'Did Mount...'
     @templateMaster = new TemplateMaster @getCredentials()
+    @handleResponse 'hello'
 
     @recognition.onresult = (event) =>
       transcript = event.results[0][0].transcript
