@@ -3,4 +3,5 @@
 mkdir -p cdn_public/$TRAVIS_COMMIT
 cp -rf public/* cdn_public/$TRAVIS_COMMIT
 mv cdn_public/$TRAVIS_COMMIT/index.html cdn_public
-sed -e "s|\\./|\\./$TRAVIS_COMMIT/|" -ir cdn_public/index.html
+sed -e "s|\\./|\\./$TRAVIS_COMMIT/|" -i.bak cdn_public/index.html
+rm cdn_public/index.html.bak
