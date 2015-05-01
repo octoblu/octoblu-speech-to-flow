@@ -18,5 +18,5 @@ routes =
   </Route>
 
 
-Router.run routes, Router.HistoryLocation, (Handler) ->
+Router.run routes, (Handler) ->
   React.render(<Handler/>, document.getElementById('app'))
