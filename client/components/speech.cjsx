@@ -46,8 +46,9 @@ Speech = React.createClass
 
   handleResponse: (transcript) ->
     console.log 'transcript', transcript
-    @templateMaster.findAndDeploy [transcript], (error) =>
+    @templateMaster.findOrCreateAndDeploy transcript, (error) =>
       console.error 'Error:', error if error?
+      console.log('IT IS DONE!')
 
   render: ->
     <div className="speech">

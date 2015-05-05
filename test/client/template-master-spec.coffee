@@ -1,4 +1,5 @@
 TemplateMaster = require '../../client/template-master'
+nodeTypes = require '../../client/assets/node-types'
 
 describe 'TemplateMaster', ->
   beforeEach ->
@@ -164,3 +165,150 @@ describe 'TemplateMaster', ->
 
         it 'should throw an error', ->
           expect(@error.message).to.equal 'oh boy'
+
+  describe '->getFlowNodeTypes', ->
+    describe 'when instantiated with credentials', ->
+      beforeEach ->
+        credentials = uuid: 'oolong', token: 'featured'
+
+        @sut = new TemplateMaster credentials, @dependencies
+
+      describe 'when called', ->
+        beforeEach (done) ->
+          @request.end = sinon.stub().yields null, body: [name: 'awesome']
+          @sut.getFlowNodeTypes => done()
+
+        it 'should set the uuid and token as the request.auth', ->
+          expect(@request.auth).to.have.been.calledWith 'oolong', 'featured'
+
+        it 'should call request.get', ->
+          expect(@request.get).to.have.been.calledWith 'https://app.octoblu.com/api/flow_node_types'
+
+        it 'should yield a flow', ->
+          expect(@sut.nodeTypes).to.deep.equal [name: 'awesome']
+
+      describe 'when called and it yields an error', ->
+        beforeEach (done) ->
+          @request.end = sinon.stub().yields new Error('it did not work')
+          @sut.getFlowNodeTypes (@error) => done()
+
+        it 'should call the callback with the error', ->
+          expect(@error.message).to.deep.equal 'it did not work'
+
+    describe 'when instantiated with different credentials', ->
+      beforeEach ->
+        credentials = uuid: 'herio', token: 'v60'
+
+        @sut = new TemplateMaster credentials, @dependencies
+
+      describe 'when called', ->
+        beforeEach (done) ->
+          @request.end = sinon.stub().yields null, body: []
+          @sut.getFlowNodeTypes => done()
+
+        it 'should set the uuid and token as the request.auth', ->
+          expect(@request.auth).to.have.been.calledWith 'herio', 'v60'
+
+  describe '->createTemplate', ->
+    describe 'when instantiated with credentials', ->
+      beforeEach ->
+        credentials = uuid: 'oolong', token: 'featured'
+
+        @sut = new TemplateMaster credentials, @dependencies
+
+      describe 'when called with a template', ->
+        beforeEach (done) ->
+          @request.end = sinon.stub().yields null, body: uuid: 1, flow: { name: 'sweet' }
+          @sut.createTemplate flow: { name: 'sweet' }, (error, @template) => done()
+
+        it 'should set the uuid and token as the request.auth', ->
+          expect(@request.auth).to.have.been.calledWith 'oolong', 'featured'
+
+        it 'should call request.post', ->
+          expect(@request.post).to.have.been.calledWith 'https://app.octoblu.com/api/templates/raw'
+
+        it 'should call request.send', ->
+          expect(@request.send).to.have.been.calledWith flow: { name: 'sweet' }
+
+        it 'should yield a flow', ->
+          expect(@template).to.deep.equal uuid: 1, flow: { name: 'sweet' }
+
+      describe 'when called and it yields an error', ->
+        beforeEach (done) ->
+          @request.end = sinon.stub().yields new Error('it did not work')
+          @sut.createTemplate bacon:  { name: 'sweet' }, (@error) => done()
+
+        it 'should call the callback with the error', ->
+          expect(@error.message).to.deep.equal 'it did not work'
+
+    describe 'when instantiated with different credentials', ->
+      beforeEach ->
+        credentials = uuid: 'herio', token: 'v60'
+
+        @sut = new TemplateMaster credentials, @dependencies
+
+      describe 'when called', ->
+        beforeEach (done) ->
+          @request.end = sinon.stub().yields null, body: []
+          @sut.createTemplate {}, => done()
+
+        it 'should set the uuid and token as the request.auth', ->
+          expect(@request.auth).to.have.been.calledWith 'herio', 'v60'
+
+  describe '->translate', ->
+    beforeEach ->
+      credentials = uuid: 'oolong', token: 'featured'
+
+      @sut = new TemplateMaster credentials, @dependencies
+      @sut.nodeTypes = nodeTypes
+
+    describe 'when called without when', ->
+      beforeEach ->
+        @result = @sut.translate 'I am home'
+
+      it 'should return nothing', ->
+        expect(@result).to.not.exist
+
+    describe 'when called with a light on transcript', ->
+      beforeEach ->
+        @result = @sut.translate 'when I am home turn the lights on'
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: 'I am home'
+          type: 'device:hue'
+          action: 'on'
+        expect(@result).to.deep.equal translated
+
+    describe 'when called with a wemo on transcript', ->
+      beforeEach ->
+        @result = @sut.translate 'when I am home turn the wemo on'
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: 'I am home'
+          type: 'device:wemo'
+          action: 'on'
+        expect(@result).to.deep.equal translated
+
+    describe 'when called with a light off transcript', ->
+      beforeEach ->
+        @result = @sut.translate 'when I am leaving then turn the lights off'
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: 'I am leaving'
+          type: 'device:hue'
+          action: 'off'
+        expect(@result).to.deep.equal translated
+
+    describe 'when called with a wemo off transcript', ->
+      beforeEach ->
+        @result = @sut.translate 'when I am leaving then turn the wemo off'
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: 'I am leaving'
+          type: 'device:wemo'
+          action: 'off'
+        expect(@result).to.deep.equal translated
