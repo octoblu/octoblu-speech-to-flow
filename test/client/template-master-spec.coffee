@@ -312,3 +312,25 @@ describe 'TemplateMaster', ->
           type: 'device:wemo'
           action: 'off'
         expect(@result).to.deep.equal translated
+
+    describe 'when called with a device name on transcript', ->
+      beforeEach ->
+        @result = @sut.translate 'when I am awesome turn the office light on'
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: 'I am awesome'
+          type: 'device:wemo'
+          action: 'on'
+        expect(@result).to.deep.equal translated
+
+    describe 'when called with a device name off transcript', ->
+      beforeEach ->
+        @result = @sut.translate 'when I am awesome turn the office light on'
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: 'I am awesome'
+          type: 'device:wemo'
+          action: 'on'
+        expect(@result).to.deep.equal translated

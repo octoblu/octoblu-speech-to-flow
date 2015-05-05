@@ -7,6 +7,7 @@ BREAKERS = ['then', 'turn']
 OBJECT_TYPE_MAP =
   lights: ['device:hue', 'device:lifx']
   wemo: ['device:wemo']
+  switch: ['device:wemo']
 WITHOUT_WORDS = ['the', 'it', 'my']
 
 class TemplateMaster
@@ -35,6 +36,8 @@ class TemplateMaster
     @findOneByTags [transcript], (error, template) =>
       return callback error if error?
       @createTemplateMaybe transcript, template, (error, template) =>
+        return callback error if error?
+        return callback new Error('unable to create template') unless template?
         @import template.uuid, (error, flow) =>
           return callback error if error?
           {flowId} = flow
@@ -47,6 +50,7 @@ class TemplateMaster
     @getFlowNodeTypes (error) =>
       return callback error if error?
       intent = @translate transcript
+      return callback new Error('invalid command') unless intent?
       dsl = @createDSL intent
       @createFromDSL transcript, dsl, callback
 
@@ -94,11 +98,13 @@ class TemplateMaster
       index--
     return if index == -1
     keyphrase = _.take(words, index + 1)?.join(' ')
-    words = _.takeRight words, index
-    object = _.first words
+    words = _.takeRight words, (words.length - 1) - index
+    action = _.last words
+    words = _.without words, action
+    object = words?.join(' ')
     nodeType = @findNodeTypeByObject(object)
     type = nodeType.type if nodeType?
-    action = _.last words
+    return unless keyphrase? && action? && type?
     {
       keyphrase: keyphrase
       action: action
@@ -107,20 +113,21 @@ class TemplateMaster
 
   findNodeTypeByObject: (object='') =>
     object = object.toLowerCase()
-    objectTypes = OBJECT_TYPE_MAP[object]
-    if objectTypes?
-      nodeType = _.find @nodeTypes, (nodeType) =>
-        return _.includes objectTypes, nodeType.type
-      return nodeType if nodeType?
-
-    return _.find @nodeTypes, (nodeType) =>
-      return false unless nodeType?
+    nodeType = _.find @nodeTypes, (nodeType) =>
+      name = nodeType.name.toLowerCase()
+      return true if name == object
       pieces = nodeType.type.split(':')
       type = pieces[1].toLowerCase() if pieces[1]?
       return true if type == object
-      type = nodeType.name.toLowerCase() if pieces[1]?
-      return true if type == object
       return false
+    return nodeType if nodeType?
+
+    objectTypes = OBJECT_TYPE_MAP[object]
+    return null unless objectTypes?
+    nodeType = _.find @nodeTypes, (nodeType) =>
+      _.includes objectTypes, nodeType.type
+    return nodeType if nodeType?
+    return null
 
   createDSL: (intent) =>
     return unless intent.action? || intent.type?

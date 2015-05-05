@@ -16,6 +16,8 @@ Speech = React.createClass
   componentWillMount: ->
     console.log 'Will Mount...'
     @recognition = new webkitSpeechRecognition()
+    # @templateMaster = new TemplateMaster @getCredentials()
+    # @handleResponse('when I am awesome turn the office light on')
 
   componentDidMount: ->
     {router} = @context

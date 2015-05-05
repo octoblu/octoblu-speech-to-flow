@@ -26,7 +26,7 @@ module.exports = {
     {
       "id": "1234",
       "category": "device",
-      "name": "Belkin Wemo",
+      "name": "Office Light",
       "staticMessage": {
         "on": true,
         "color": "white"
@@ -42,7 +42,7 @@ module.exports = {
       ],
       "defaults": {
         "category": "device",
-        "name": "Belkin Wemo",
+        "name": "Office Light",
         "type": "device:wemo"
       },
       "output": 1,

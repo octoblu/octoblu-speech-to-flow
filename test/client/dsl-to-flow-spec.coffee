@@ -101,7 +101,7 @@ describe 'DSLToFlow', ->
             id: "1234",
             type: "device:wemo",
             uuid: "2836e14d-ef41-40b3-8861-24ae5464da97"
-            name: "Belkin Wemo"
+            name: "Office Light"
             category: "device"
             staticMessage:
               on: true,
@@ -116,7 +116,7 @@ describe 'DSLToFlow', ->
             input: 1
             defaults:
               category: "device"
-              name: "Belkin Wemo"
+              name: "Office Light"
               type: "device:wemo"
 
           expect(@result).to.deep.equal hueNode
