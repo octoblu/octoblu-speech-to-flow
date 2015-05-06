@@ -43,6 +43,7 @@ class DSLToFlow
 
     node.output = nodeType.output if nodeType.output?
     node.input = nodeType.input if nodeType.input?
+    node.formTemplatePath = nodeType.formTemplatePath if nodeType.formTemplatePath?
 
     defaults = {}
     defaults.channelid = nodeType.channelid if nodeType.channelid?

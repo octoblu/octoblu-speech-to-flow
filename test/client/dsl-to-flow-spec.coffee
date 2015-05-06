@@ -50,6 +50,7 @@ describe 'DSLToFlow', ->
             category: "operation"
             name: "Trigger"
             type: "operation:trigger"
+          formTemplatePath: "/pages/node_forms/button_form.html"
 
         expect(@result).to.deep.equal triggerNode
 
@@ -83,6 +84,7 @@ describe 'DSLToFlow', ->
             category: "operation"
             name: "Interval"
             type: "operation:interval"
+          formTemplatePath: "/pages/node_forms/interval_form.html"
 
         expect(@result).to.deep.equal intervalNode
 
@@ -118,6 +120,7 @@ describe 'DSLToFlow', ->
               category: "device"
               name: "Office Light"
               type: "device:wemo"
+            formTemplatePath: "/pages/node_forms/device_form.html"
 
           expect(@result).to.deep.equal hueNode
 

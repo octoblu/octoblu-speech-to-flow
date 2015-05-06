@@ -21,7 +21,8 @@ module.exports = {
       "output": 1,
       "input": 0,
       "x": 1,
-      "y": 1
+      "y": 1,
+      "formTemplatePath": "/pages/node_forms/button_form.html"
     },
     {
       "id": "1234",
@@ -48,7 +49,8 @@ module.exports = {
       "output": 1,
       "input": 1,
       "x": 301,
-      "y": 1
+      "y": 1,
+      "formTemplatePath": "/pages/node_forms/device_form.html"
     }
   ],
   "links": [
