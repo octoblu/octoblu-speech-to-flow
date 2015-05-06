@@ -13,6 +13,7 @@ module.exports = {
       "outputLocations": [
         27.5
       ],
+      "resourceType": "flow-node",
       "defaults": {
         "category": "operation",
         "name": "Trigger",
@@ -32,6 +33,7 @@ module.exports = {
         "on": true,
         "color": "white"
       },
+      "resourceType": "flow-node",
       "useStaticMessage": true,
       "type": "device:wemo",
       "uuid": "2836e14d-ef41-40b3-8861-24ae5464da97",

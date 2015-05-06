@@ -40,6 +40,7 @@ class DSLToFlow
       ]
       input: 1
       output: 1
+      resourceType: "flow-node"
 
     node.output = nodeType.output if nodeType.output?
     node.input = nodeType.input if nodeType.input?

@@ -46,6 +46,7 @@ describe 'DSLToFlow', ->
           ]
           output: 1
           input: 0
+          resourceType: "flow-node"
           defaults:
             category: "operation"
             name: "Trigger"
@@ -84,6 +85,7 @@ describe 'DSLToFlow', ->
             category: "operation"
             name: "Interval"
             type: "operation:interval"
+          resourceType: "flow-node"
           formTemplatePath: "/pages/node_forms/interval_form.html"
 
         expect(@result).to.deep.equal intervalNode
@@ -120,6 +122,7 @@ describe 'DSLToFlow', ->
               category: "device"
               name: "Office Light"
               type: "device:wemo"
+            resourceType: "flow-node"
             formTemplatePath: "/pages/node_forms/device_form.html"
 
           expect(@result).to.deep.equal hueNode
