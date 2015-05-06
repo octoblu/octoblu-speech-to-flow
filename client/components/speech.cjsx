@@ -2,7 +2,6 @@ _ = require 'lodash'
 React = require 'react'
 TemplateMaster = require '../template-master'
 
-
 Speech = React.createClass
   displayName: 'SpeechWindow'
 
@@ -16,8 +15,11 @@ Speech = React.createClass
   componentWillMount: ->
     console.log 'Will Mount...'
     @recognition = new webkitSpeechRecognition()
-    # @templateMaster = new TemplateMaster @getCredentials()
+    @templateMaster = new TemplateMaster @getCredentials()
     # @handleResponse('when I am awesome turn the office light on')
+    # setTimeout =>
+    # @handleResponse('i am awesome')
+    # , 10000
 
   componentDidMount: ->
     {router} = @context

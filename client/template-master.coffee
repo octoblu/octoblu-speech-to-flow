@@ -1,6 +1,7 @@
 _ = require 'lodash'
 DSLToFlow = require './dsl-to-flow'
 FlowGenerator = require './flow-generator'
+TriggerService = require './trigger-service'
 nodeMeta = require './assets/node-meta'
 ACTION_STARTERS = ['when']
 BREAKERS = ['then', 'turn']
@@ -14,6 +15,7 @@ class TemplateMaster
   constructor: (credentials, dependencies={}) ->
     {@uuid, @token} = credentials
     @request = dependencies.request ? require 'superagent'
+    @triggerService = new TriggerService credentials, dependencies
 
     @OCTOBLU_API = 'https://app.octoblu.com'
     @MESHBLU_API = 'https://meshblu.octoblu.com'
@@ -50,9 +52,12 @@ class TemplateMaster
     @getFlowNodeTypes (error) =>
       return callback error if error?
       intent = @translate transcript
-      return callback new Error('invalid command') unless intent?
+      return @tryAndFireTrigger(transcript) unless intent?
       dsl = @createDSL intent
       @createFromDSL transcript, dsl, callback
+
+  tryAndFireTrigger: (transcript) =>
+    @triggerService.fire(transcript)
 
   findOneByTags: (tags, callback=->) =>
     tags =  _.map tags, (tag) =>
@@ -132,14 +137,18 @@ class TemplateMaster
   createDSL: (intent) =>
     return unless intent.action? || intent.type?
     flowGenerator = new FlowGenerator @nodeTypes
-    defaultNodeMeta = nodeMeta[intent.type]?[intent.action] || {}
-    nodeMeta = _.defaults(type: intent.type, defaultNodeMeta)
-    flowGenerator.addNode type: 'operation:trigger'
-    flowGenerator.addNode nodeMeta
-    flowGenerator.addNode type: 'operation:debug'
+    triggerMeta = @getMetaData('operation:trigger', 'timestamp')
+    triggerMeta.name = intent.keyphrase?.toLowerCase()
+    flowGenerator.addNode triggerMeta
+    flowGenerator.addNode @getMetaData(intent.type, intent.action)
+    flowGenerator.addNode @getMetaData('operation:debug', 'timestamp')
     flowGenerator.linkNodes 0, 1
     flowGenerator.linkNodes 1, 2
     flowGenerator.flow
+
+  getMetaData: (type, action) =>
+    defaultNodeMeta = nodeMeta[type]?[action] || {}
+    _.defaults(type: type, defaultNodeMeta)
 
   createFromDSL: (transcript, dsl, callback=->) =>
     dslToFlow = new DSLToFlow nodeTypes: @nodeTypes
