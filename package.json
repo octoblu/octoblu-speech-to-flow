@@ -23,6 +23,7 @@
     "node-uuid": "^1.4.3",
     "react": "^0.13.2",
     "react-router": "^0.13.3",
+    "replaceall": "^0.1.6",
     "superagent": "^1.2.0"
   },
   "devDependencies": {

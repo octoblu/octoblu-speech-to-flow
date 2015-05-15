@@ -1,4 +1,5 @@
 _ = require 'lodash'
+replaceAll = require 'replaceall'
 DSLToFlow = require './dsl-to-flow'
 FlowGenerator = require './flow-generator'
 TriggerService = require './trigger-service'
@@ -10,6 +11,12 @@ OBJECT_TYPE_MAP =
   wemo: ['device:wemo']
   switch: ['device:wemo']
 WITHOUT_WORDS = ['the', 'it', 'my']
+SHORTENED_WORDS = {
+  "i'm": "i am",
+  "it's": "it is",
+  "doesn't": "does not",
+  "isn't": "is not"
+}
 
 class TemplateMaster
   constructor: (credentials, dependencies={}) ->
@@ -52,7 +59,8 @@ class TemplateMaster
     @getFlowNodeTypes (error) =>
       return callback error if error?
       intent = @translate transcript
-      return @tryAndFireTrigger(transcript) unless intent?
+      console.log('intent', intent)
+      return @tryAndFireTrigger(@simplifyTranscript(transcript)) unless intent?
       dsl = @createDSL intent
       @createFromDSL transcript, dsl, callback
 
@@ -88,7 +96,14 @@ class TemplateMaster
       .end (error) =>
         callback error
 
+  simplifyTranscript: (transcript) =>
+    transcript = transcript.toLowerCase()
+    _.each _.keys(SHORTENED_WORDS), (key) =>
+      transcript = replaceAll key, SHORTENED_WORDS[key], transcript
+    transcript
+
   translate: (transcript) =>
+    transcript = @simplifyTranscript transcript
     words = transcript.split(' ')
     _.each WITHOUT_WORDS, (word) =>
       words = _.without words, word

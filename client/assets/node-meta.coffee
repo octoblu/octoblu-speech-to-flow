@@ -3,14 +3,18 @@ module.exports = {
     "on": {
       "staticMessage": {
         "on": true,
-        "color": "white"
+        "color": "white",
+        "useGroup": true,
+        "lightNumber": 0
       },
       "useStaticMessage": true
     },
     "off": {
       "staticMessage": {
         "on": false,
-        "color": "white"
+        "color": "white",
+        "useGroup": true,
+        "lightNumber": 0
       },
       "useStaticMessage": true
     }
@@ -19,14 +23,18 @@ module.exports = {
     "on": {
       "staticMessage": {
         "on": true,
-        "color": "white"
+        "color": "white",
+        "useGroup": true,
+        "lightNumber": 0
       },
       "useStaticMessage": true
     },
     "off": {
       "staticMessage": {
         "on": false,
-        "color": "white"
+        "color": "white",
+        "useGroup": true,
+        "lightNumber": 0
       },
       "useStaticMessage": true
     }

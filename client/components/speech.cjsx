@@ -16,10 +16,10 @@ Speech = React.createClass
     console.log 'Will Mount...'
     @recognition = new webkitSpeechRecognition()
     @templateMaster = new TemplateMaster @getCredentials()
-    # @handleResponse('when I am awesome turn the office light on')
-    # setTimeout =>
-    # @handleResponse('i am awesome')
-    # , 10000
+    @handleResponse('when I am awesome turn the office light on')
+    setTimeout =>
+      @handleResponse("i'm awesome")
+    , 30000
 
   componentDidMount: ->
     {router} = @context

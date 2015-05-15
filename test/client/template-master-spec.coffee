@@ -275,7 +275,7 @@ describe 'TemplateMaster', ->
 
       it 'should return translated object', ->
         translated =
-          keyphrase: 'I am home'
+          keyphrase: "i am home"
           type: 'device:hue'
           action: 'on'
         expect(@result).to.deep.equal translated
@@ -286,7 +286,7 @@ describe 'TemplateMaster', ->
 
       it 'should return translated object', ->
         translated =
-          keyphrase: 'I am home'
+          keyphrase: "i am home"
           type: 'device:wemo'
           action: 'on'
         expect(@result).to.deep.equal translated
@@ -297,7 +297,7 @@ describe 'TemplateMaster', ->
 
       it 'should return translated object', ->
         translated =
-          keyphrase: 'I am leaving'
+          keyphrase: "i am leaving"
           type: 'device:hue'
           action: 'off'
         expect(@result).to.deep.equal translated
@@ -308,7 +308,7 @@ describe 'TemplateMaster', ->
 
       it 'should return translated object', ->
         translated =
-          keyphrase: 'I am leaving'
+          keyphrase: "i am leaving"
           type: 'device:wemo'
           action: 'off'
         expect(@result).to.deep.equal translated
@@ -319,7 +319,7 @@ describe 'TemplateMaster', ->
 
       it 'should return translated object', ->
         translated =
-          keyphrase: 'I am awesome'
+          keyphrase: "i am awesome"
           type: 'device:wemo'
           action: 'on'
         expect(@result).to.deep.equal translated
@@ -330,7 +330,18 @@ describe 'TemplateMaster', ->
 
       it 'should return translated object', ->
         translated =
-          keyphrase: 'I am awesome'
+          keyphrase: "i am awesome"
+          type: 'device:wemo'
+          action: 'on'
+        expect(@result).to.deep.equal translated
+
+    describe 'when called with shortened words transcript', ->
+      beforeEach ->
+        @result = @sut.translate "when i'm awesome turn the office light on"
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: "i am awesome"
           type: 'device:wemo'
           action: 'on'
         expect(@result).to.deep.equal translated
