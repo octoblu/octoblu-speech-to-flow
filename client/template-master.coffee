@@ -8,14 +8,19 @@ ACTION_STARTERS = ['when']
 BREAKERS = ['then', 'turn']
 OBJECT_TYPE_MAP =
   lights: ['device:hue', 'device:lifx']
+  light: ['device:hue', 'device:lifx']
   wemo: ['device:wemo']
   switch: ['device:wemo']
 WITHOUT_WORDS = ['the', 'it', 'my']
 SHORTENED_WORDS = {
   "i'm": "i am",
+  "i’m": "i am",
   "it's": "it is",
+  "it’s": "it is",
   "doesn't": "does not",
+  "doesn’t": "does not",
   "isn't": "is not"
+  "isn’t": "is not"
 }
 
 class TemplateMaster
@@ -40,32 +45,28 @@ class TemplateMaster
         # Deploy the Flow
         @deploy flowId, callback
 
-  findOrCreateAndDeploy: (transcript, callback=->) =>
+  createAndDeploy: (transcript, callback=->) =>
     # Find By Tag
-    @findOneByTags [transcript], (error, template) =>
+    @createByTranscript transcript, (error, flow) =>
       return callback error if error?
-      @createTemplateMaybe transcript, template, (error, template) =>
-        return callback error if error?
-        return callback new Error('unable to create template') unless template?
-        @import template.uuid, (error, flow) =>
-          return callback error if error?
-          {flowId} = flow
-          return callback new Error('no flow created') unless flowId?
-          # Deploy the Flow
-          @deploy flowId, callback
+      return callback new Error('unable to create flow') unless flow?
+      {flowId} = flow
+      return callback new Error('no flow created') unless flowId?
+      # Deploy the Flow
+      @deploy flowId, callback
 
-  createTemplateMaybe: (transcript, template, callback=->) =>
-    return callback null, template if template?
+  createByTranscript: (transcript, callback=->) =>
     @getFlowNodeTypes (error) =>
       return callback error if error?
       intent = @translate transcript
+      return @tryAndFireTrigger(transcript) unless intent?
       console.log('intent', intent)
-      return @tryAndFireTrigger(@simplifyTranscript(transcript)) unless intent?
       dsl = @createDSL intent
       @createFromDSL transcript, dsl, callback
 
   tryAndFireTrigger: (transcript) =>
-    @triggerService.fire(transcript)
+    console.log('attempting to fire trigger', transcript)
+    @triggerService.fire @simplifyTranscript(transcript)
 
   findOneByTags: (tags, callback=->) =>
     tags =  _.map tags, (tag) =>
@@ -105,8 +106,6 @@ class TemplateMaster
   translate: (transcript) =>
     transcript = @simplifyTranscript transcript
     words = transcript.split(' ')
-    _.each WITHOUT_WORDS, (word) =>
-      words = _.without words, word
     firstWord = _.first words
     return unless _.includes ACTION_STARTERS, firstWord
     actionStarter = firstWord
@@ -119,6 +118,8 @@ class TemplateMaster
     return if index == -1
     keyphrase = _.take(words, index + 1)?.join(' ')
     words = _.takeRight words, (words.length - 1) - index
+    _.each WITHOUT_WORDS, (word) =>
+      words = _.without words, word
     action = _.last words
     words = _.without words, action
     object = words?.join(' ')
@@ -167,16 +168,25 @@ class TemplateMaster
 
   createFromDSL: (transcript, dsl, callback=->) =>
     dslToFlow = new DSLToFlow nodeTypes: @nodeTypes
-    template = dslToFlow.convertToFlow dsl
-    @createTemplate name: transcript, flow: template, (error, template) =>
+    flow = dslToFlow.convertToFlow dsl
+    flow.name = transcript
+    @createFlow flow, (error, newFlow) =>
       return callback error if error?
-      callback null, template
+      callback null, newFlow
 
   createTemplate: (template, callback=->) =>
     @request
       .post "#{@OCTOBLU_API}/api/templates/raw"
       .auth @uuid, @token
       .send template
+      .end (error, result) =>
+        callback error, result?.body
+
+  createFlow: (flow, callback=->) =>
+    @request
+      .post "#{@OCTOBLU_API}/api/flows"
+      .auth @uuid, @token
+      .send flow
       .end (error, result) =>
         callback error, result?.body
 

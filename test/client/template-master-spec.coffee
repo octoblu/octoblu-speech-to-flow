@@ -345,3 +345,64 @@ describe 'TemplateMaster', ->
           type: 'device:wemo'
           action: 'on'
         expect(@result).to.deep.equal translated
+
+    describe 'when called with "when I am in the office then turn the lights off" transcript', ->
+      beforeEach ->
+        @result = @sut.translate "when I am in the office then turn the lights off"
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: "i am in the office"
+          type: 'device:hue'
+          action: 'off'
+        expect(@result).to.deep.equal translated
+
+    describe 'when called with "when I’m home turn the lights on" transcript', ->
+      beforeEach ->
+        @result = @sut.translate "when I’m home turn the lights on"
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: "i am home"
+          type: 'device:hue'
+          action: 'on'
+        expect(@result).to.deep.equal translated
+
+    describe 'when called with "when I am in the office then turn the lights off" transcript', ->
+      beforeEach ->
+        @result = @sut.translate "when I am in the office then turn the lights off"
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: "i am in the office"
+          type: 'device:hue'
+          action: 'off'
+        expect(@result).to.deep.equal translated
+
+    describe 'when called with "when I am office then turn the lights off" transcript', ->
+      beforeEach ->
+        @result = @sut.translate "when I am office then turn the lights off"
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: "i am office"
+          type: 'device:hue'
+          action: 'off'
+        expect(@result).to.deep.equal translated
+    describe 'when called with "when I am home turn the lights on" transcript', ->
+      beforeEach ->
+        @result = @sut.translate "when I am home turn the lights on"
+
+      it 'should return translated object', ->
+        translated =
+          keyphrase: "i am home"
+          type: 'device:hue'
+          action: 'on'
+        expect(@result).to.deep.equal translated
+
+    describe 'when called with a keyphrase', ->
+      beforeEach ->
+        @result = @sut.translate "i am home"
+
+      it 'should have an empty result', ->
+        expect(@result).to.be.empty

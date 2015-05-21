@@ -16,9 +16,9 @@ Speech = React.createClass
     console.log 'Will Mount...'
     @recognition = new webkitSpeechRecognition()
     @templateMaster = new TemplateMaster @getCredentials()
-    # @handleResponse('when I am awesome turn the office light on')
+    # @handleResponse("when I am in the office then turn the lights off")
     # setTimeout =>
-    #   @handleResponse("i'm awesome")
+    #   @handleResponse("I'm in the office")
     # , 30000
 
   componentDidMount: ->
@@ -50,7 +50,7 @@ Speech = React.createClass
 
   handleResponse: (transcript) ->
     console.log 'transcript', transcript
-    @templateMaster.findOrCreateAndDeploy transcript, (error) =>
+    @templateMaster.createAndDeploy transcript, (error) =>
       console.error 'Error:', error if error?
       console.log('IT IS DONE!')
 
