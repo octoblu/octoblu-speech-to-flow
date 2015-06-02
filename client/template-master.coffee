@@ -135,6 +135,7 @@ class TemplateMaster
   findNodeTypeByObject: (object='') =>
     object = object.toLowerCase()
     nodeType = _.find @nodeTypes, (nodeType) =>
+      return false unless nodeType?.name?
       name = nodeType.name.toLowerCase()
       return true if name == object
       pieces = nodeType.type.split(':')
