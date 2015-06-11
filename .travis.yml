@@ -22,29 +22,8 @@ env:
   - secure: TvwLrTxCVAp0ve4cAbiDb5bFKjBH3G2bG3MUmqn2y7RhGBCw7lWt6wXF9AXmuAFRW2iWaAdEF2Ctb3eu73zRXcmUPLrscEvASRAvxfTjSqwerv/gx67LZM/K+31axQl2ePDQLDdt96A5ZQPnOhtyqv/FfiCQf6EdKgP/YoG164U=
   - secure: YfAPPBsWafZYzJ/uxcHtEdPu5qwmlVLQ73QKab3vlbMl+tCfy1NPfxl86dGEjALzLqAiQBBNoO516WmI9n6G+4tkV03IuDo6nVQM7FWgECyKvJEoIknFjZD2TfMNVPkArrpJIS608TriIPdVMbIeaAPrCd5eJymSGgDXuYm5mYc=
 after_success:
-- .kubernetes/travis_after_success
 - ./.travis_after_success
 deploy:
-- provider: s3
-  access_key_id: AKIAJH2D5IPIRHYJT5IA
-  secret_access_key: &1
-    secure: Fxsscye9TfVKaBqytYuZdthogWzUspOq2mlC86onRhhN/3+7rZu4Q5Yq3DIosniahD0JZrozfG5vHdGX/rQk8RGrR9F78UJoKmD2Hd4433yoLAOiFbfw3xLQS2mg3lPLSmFc869xgvwn8bBEY7JTSCe+ALV4t4RHXcaFDFiq5Ok=
-  local_dir: dpl_cd_upload
-  skip_cleanup: true
-  bucket: octoblu-deploy
-  on:
-    branch: master
-- provider: codedeploy
-  access_key_id: AKIAJH2D5IPIRHYJT5IA
-  secret_access_key: *1
-  bucket: octoblu-deploy
-  key: docker-builder/octoblu-speech-to-flow-$TRAVIS_COMMIT.zip
-  bundle_type: zip
-  region: us-west-2
-  application: docker-builder
-  deployment_group: octoblu-speech-to-flow
-  on:
-    branch: master
 - provider: s3
   access_key_id: AKIAJH2D5IPIRHYJT5IA
   secret_access_key: *1
