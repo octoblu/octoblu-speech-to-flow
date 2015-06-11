@@ -7,11 +7,11 @@ cache:
 node_js:
 - '0.10'
 before_script:
-  - npm install
-  - node_modules/.bin/gulp build
+- npm install
+- node_modules/.bin/gulp build
 env:
   global:
-  - AWS_ACCESS_KEY_ID=AKIAIT4X4NDGM2WVL6VA
+  - AWS_ACCESS_KEY_ID=AKIAJH2D5IPIRHYJT5IA
   - DOCKER_USERNAME=octoblu
   - DEPLOY_APPLICATION_NAME=octoblu-speech-to-flow
   - DEPLOY_REGION=us-west-2
@@ -20,21 +20,22 @@ env:
   - DEPLOY_KEY=octoblu-speech-to-flow/octoblu-speech-to-flow-$TRAVIS_COMMIT.zip
   - secure: RzAEWZQJUCkSlcGDRVJZSyQe40wwj+8SFF5PFJDsoAD7f+XF6lenW8EuohoohhZxTNprfMW86ERsrq9DwfkEoEv9iSRq7nGNIx9wbQbzJePZQiVujMEOgSW5/V8g6E1ICpeGb+O3I8bAcgYW34Q60srdeEC13A76bU1UcJTfWgs=
   - secure: TvwLrTxCVAp0ve4cAbiDb5bFKjBH3G2bG3MUmqn2y7RhGBCw7lWt6wXF9AXmuAFRW2iWaAdEF2Ctb3eu73zRXcmUPLrscEvASRAvxfTjSqwerv/gx67LZM/K+31axQl2ePDQLDdt96A5ZQPnOhtyqv/FfiCQf6EdKgP/YoG164U=
+  - secure: YfAPPBsWafZYzJ/uxcHtEdPu5qwmlVLQ73QKab3vlbMl+tCfy1NPfxl86dGEjALzLqAiQBBNoO516WmI9n6G+4tkV03IuDo6nVQM7FWgECyKvJEoIknFjZD2TfMNVPkArrpJIS608TriIPdVMbIeaAPrCd5eJymSGgDXuYm5mYc=
 after_success:
 - .kubernetes/travis_after_success
 - ./.travis_after_success
 deploy:
 - provider: s3
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
   secret_access_key: &1
-    secure: Y7P9YQi85ULGOhxL0YbM18ndctUqVAlGVdFTEqzl2eit/tyuRGU5BEWEhx8yJFfhoZfP9afdYiYtRfz8VSua09wfXoDFfgrwRMuK9l+wHLkA0nki8Aj+YNKrWl6f6kXRNr5McrWDzgRaqA1mEG1c8lYbMYQWdjXrtZgcguJ92SQ=
+    secure: Fxsscye9TfVKaBqytYuZdthogWzUspOq2mlC86onRhhN/3+7rZu4Q5Yq3DIosniahD0JZrozfG5vHdGX/rQk8RGrR9F78UJoKmD2Hd4433yoLAOiFbfw3xLQS2mg3lPLSmFc869xgvwn8bBEY7JTSCe+ALV4t4RHXcaFDFiq5Ok=
   local_dir: dpl_cd_upload
   skip_cleanup: true
   bucket: octoblu-deploy
   on:
     branch: master
 - provider: codedeploy
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
   secret_access_key: *1
   bucket: octoblu-deploy
   key: docker-builder/octoblu-speech-to-flow-$TRAVIS_COMMIT.zip
@@ -45,13 +46,13 @@ deploy:
   on:
     branch: master
 - provider: s3
-  access_key_id: AKIAIT4X4NDGM2WVL6VA
+  access_key_id: AKIAJH2D5IPIRHYJT5IA
   secret_access_key: *1
   bucket: speech-to-flow.octoblu.com
   region: us-west-2
   skip_cleanup: true
   detect_encoding: true
-  cache_control: "max-age=31536000"
+  cache_control: max-age=31536000
   local_dir: cdn_public
   on:
     branch: master
